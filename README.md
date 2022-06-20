@@ -18,4 +18,6 @@ if err != nil {
 This function will create missing indexes and delete extra indexes.
 Call to `SyncIndexes` is blocking.
 
+Default "\_id\_" index is fully ignored.
+
 It's important to use int32 values.
