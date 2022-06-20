@@ -52,13 +52,15 @@ func SyncIndexes(ctx context.Context, collection *mongo.Collection, requiredInde
 		existingIndexes = append(existingIndexes, index.Key)
 	}
 
-	var indexesToDelete []string
 	for _, existingIndex := range existingIndexesStructs {
 		if existingIndex.Name == "_id_" {
 			continue
 		}
 		if !contains(requiredIndexes, existingIndex.Key) {
-			indexesToDelete = append(indexesToDelete, existingIndex.Name)
+			_, err = collection.Indexes().DropOne(ctx, existingIndex.Name)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -68,16 +70,8 @@ func SyncIndexes(ctx context.Context, collection *mongo.Collection, requiredInde
 			indexesToCreate = append(indexesToCreate, mongo.IndexModel{Keys: requiredIndex})
 		}
 	}
-
 	if len(indexesToCreate) > 0 {
 		_, err = collection.Indexes().CreateMany(ctx, indexesToCreate)
-		if err != nil {
-			return err
-		}
-	}
-
-	for _, index := range indexesToDelete {
-		_, err = collection.Indexes().DropOne(ctx, index)
 		if err != nil {
 			return err
 		}
