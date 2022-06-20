@@ -1,4 +1,4 @@
-module mongo-index-manager-go
+module github.com/proxima-one/mongo-index-manager-go
 
 go 1.18
 
