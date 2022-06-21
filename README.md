@@ -8,7 +8,7 @@ This package synchronizes MongoDB indexes with given in code.
 err := index_manager.SyncIndexes(context.Background(), repo.GetCollection("coll"),
     []bson.D{
         {{"token_id", int32(1)}},
-        {{"timestamp", int32(-1)}},
+        {{"token_id", int32(1)}, {"timestamp", int32(-1)}},
         {{"field", "hashed"}},
     })
 if err != nil {
